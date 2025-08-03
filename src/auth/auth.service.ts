@@ -7,6 +7,8 @@ import { UserService } from 'src/user/user.service';
 import { LoginDto } from './dto/login.dto';
 import { compare } from 'bcrypt';
 
+const EXPIRY_TIME = 20 * 1000;
+
 @Injectable()
 export class AuthService {
   constructor(
@@ -28,13 +30,14 @@ export class AuthService {
       user,
       backendTokens: {
         accessToken: await this.jwtService.signAsync(payload, {
-          expiresIn: '1h',
+          expiresIn: '5s',
           secret: process.env.JWT_SECRET_KEY,
         }),
         refreshToken: await this.jwtService.signAsync(payload, {
           expiresIn: '7d',
           secret: process.env.JWT_REFRESH_TOKEN_KEY,
         }),
+        expiresIn: new Date().setTime(new Date().getTime() + EXPIRY_TIME)
       },
     };
   }
@@ -64,6 +67,7 @@ export class AuthService {
           expiresIn: '7d',
           secret: process.env.JWT_REFRESH_TOKEN_KEY,
         }),
+        expiresIn: new Date().setTime(new Date().getTime() + EXPIRY_TIME)
       }
   }
 }

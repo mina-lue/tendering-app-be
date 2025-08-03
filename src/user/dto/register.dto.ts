@@ -10,4 +10,16 @@ export class CreateUserDto {
 
   @IsString()
   password: string;
+
+  @IsString()
+  tin?: string = '';
+
+  @IsString()
+  sex?: string = '';
+
+  @IsString()
+  phone: string;
+
+  @IsString()
+  role: 'vendor' | 'buyer';
 }
