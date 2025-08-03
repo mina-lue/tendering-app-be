@@ -5,7 +5,7 @@ import { AuthService } from './auth.service';
 import { LoginDto } from './dto/login.dto';
 import { JwtRefreshGuard } from './gaurd/jwt-refresh.guard';
 
-@Controller('auth')
+@Controller('api/auth')
 export class AuthController {
   constructor(
     private userService: UserService,
