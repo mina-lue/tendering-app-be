@@ -13,13 +13,42 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+enum Role {
+  VENDOR
+  BUYER
+}
+
+enum TenderStatus {
+  OPEN
+  CLOSED
+  DRAFT
+}
+
 model User {
-  id       Int     @id @default(autoincrement())
-  email    String  @unique
+  id       Int      @id @default(autoincrement())
+  email    String   @unique
   name     String
   password String
   sex      String?
   tin      String?
   phone    String
-  role     String
+  role     Role
+  tenders  Tender[]
+}
+
+model Tender {
+  id                  Int           @id @default(autoincrement())
+  details             String
+  organizationId      Int
+  openAt              DateTime
+  closeAt             DateTime
+  document_buy_option Boolean
+  status              TenderStatus
+  createdAt           DateTime      @default(now())
+  updatedAt           DateTime      @updatedAt
+
+  organization        User          @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+
+  @@index([openAt])
+  @@index([closeAt])
 }
