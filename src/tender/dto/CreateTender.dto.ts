@@ -1,5 +1,13 @@
 // src/tender/dto/CreateTender.dto.ts
-import { IsString, IsNumber, IsDate, IsBoolean, IsEnum } from 'class-validator';
+import {
+  IsString,
+  IsNumber,
+  IsDate,
+  IsBoolean,
+  IsEnum,
+  ValidateIf,
+  IsOptional,
+} from 'class-validator';
 import { Type } from 'class-transformer';
 
 export class CreateTenderDto {
@@ -20,6 +28,11 @@ export class CreateTenderDto {
   @IsBoolean()
   document_buy_option: boolean;
 
-  @IsEnum(['DOWN', 'OPEN', 'YET'] as const)
-  status: 'DOWN' | 'OPEN' | 'YET';
+  @IsOptional()
+  @ValidateIf((o) => o.document_buy_option === true)
+  @IsString()
+  urlToDoc: string;
+
+  @IsEnum(['CLOSED', 'OPEN', 'DRAFT'] as const)
+  status: 'CLOSED' | 'OPEN' | 'DRAFT';
 }
