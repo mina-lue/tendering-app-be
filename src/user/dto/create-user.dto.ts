@@ -12,7 +12,7 @@ export class CreateUserDto {
   password: string;
 
   @IsString()
-  tin?: string = '';
+  urlToDoc?: string = '';
 
   @IsString()
   sex?: string = '';

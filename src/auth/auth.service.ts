@@ -7,13 +7,14 @@ import { UserService } from 'src/user/user.service';
 import { LoginDto } from './dto/login.dto';
 import { compare } from 'bcrypt';
 
-const EXPIRY_TIME = 5* 60 * 60 * 1000;
+const ACCESS_TOKEN_EXPIRES_IN_SEC = 5 * 60 * 60;    // 5 hours in seconds
+const REFRESH_TOKEN_EXPIRES_IN_SEC = 10 * 24 * 60 * 60; // 10 days in seconds
 
 @Injectable()
 export class AuthService {
   constructor(
-    private userService: UserService,
-    private jwtService: JwtService,
+    private readonly userService: UserService,
+    private readonly jwtService: JwtService,
   ) {}
 
   async login(dto: LoginDto) {
@@ -21,53 +22,68 @@ export class AuthService {
 
     const payload = {
       username: user.email,
-      sub: {
-        name: user.name,
-      },
+      // if you have an `id`, it’s better to put it here:
+      sub: user.id,
     };
+
+    // sign tokens
+    const accessToken = await this.jwtService.signAsync(payload, {
+      secret: process.env.JWT_SECRET_KEY,
+      expiresIn: ACCESS_TOKEN_EXPIRES_IN_SEC,
+    });
+    const refreshToken = await this.jwtService.signAsync(payload, {
+      secret: process.env.JWT_REFRESH_TOKEN_KEY,
+      expiresIn: REFRESH_TOKEN_EXPIRES_IN_SEC,
+    });
+
+    // compute absolute expiry
+    const expiresAt = Date.now() + ACCESS_TOKEN_EXPIRES_IN_SEC * 1000;
 
     return {
       user,
       backendTokens: {
-        accessToken: await this.jwtService.signAsync(payload, {
-          expiresIn: '5h',
-          secret: process.env.JWT_SECRET_KEY,
-        }),
-        refreshToken: await this.jwtService.signAsync(payload, {
-          expiresIn: '10d',
-          secret: process.env.JWT_REFRESH_TOKEN_KEY,
-        }),
-        expiresIn: new Date().setTime(new Date().getTime() + EXPIRY_TIME)
+        accessToken,
+        refreshToken,
+        // client can compare Date.now() to this to know when to refresh
+        expiresAt,
       },
     };
   }
 
   async validateUser(dto: LoginDto) {
     const user = await this.userService.findByEmail(dto.email);
-
-    if (user && (await compare(dto.password, user.password))) {
-      const { password, ...userFound } = user;
-      return userFound;
+    if (
+      user &&
+      (await compare(dto.password, user.password))
+    ) {
+      // strip out the password before returning
+      const { password, ...safeUser } = user;
+      return safeUser;
     }
-    throw new UnauthorizedException();
+    throw new UnauthorizedException('Invalid credentials');
   }
 
-  async refreshToken(user: any) {
+  async refreshToken(tokenPayload: any) {
+    // tokenPayload is what you decoded/validated from the incoming refresh token
     const payload = {
-      username: user.username,
-      sub: user.sub
+      username: tokenPayload.username,
+      sub: tokenPayload.sub,
     };
 
+    const accessToken = await this.jwtService.signAsync(payload, {
+      secret: process.env.JWT_SECRET_KEY,
+      expiresIn: ACCESS_TOKEN_EXPIRES_IN_SEC,
+    });
+    const refreshToken = await this.jwtService.signAsync(payload, {
+      secret: process.env.JWT_REFRESH_TOKEN_KEY,
+      expiresIn: REFRESH_TOKEN_EXPIRES_IN_SEC,
+    });
+    const expiresAt = Date.now() + ACCESS_TOKEN_EXPIRES_IN_SEC * 1000;
+
     return {
-        accessToken: await this.jwtService.signAsync(payload, {
-          expiresIn: '1h',
-          secret: process.env.JWT_SECRET_KEY,
-        }),
-        refreshToken: await this.jwtService.signAsync(payload, {
-          expiresIn: '7d',
-          secret: process.env.JWT_REFRESH_TOKEN_KEY,
-        }),
-        expiresIn: new Date().setTime(new Date().getTime() + EXPIRY_TIME)
-      }
+      accessToken,
+      refreshToken,
+      expiresAt,
+    };
   }
 }

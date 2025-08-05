@@ -19,4 +19,8 @@ export class TenderService {
       },
     });
   }
+
+  async getRecent() {
+    return await this.prisma.tender.findMany();
+  }
 }
