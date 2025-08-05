@@ -23,4 +23,10 @@ export class TenderService {
   async getRecent() {
     return await this.prisma.tender.findMany();
   }
+
+  async findById(id: number) {
+    return await this.prisma.tender.findUnique({
+      where: { id },
+    });
+  }
 }

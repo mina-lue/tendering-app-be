@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Post, UseGuards } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post, UseGuards } from '@nestjs/common';
 import { JwtGuard } from 'src/auth/gaurd/jwt.guard';
 import { CreateTenderDto } from './dto/CreateTender.dto';
 import { TenderService } from './tender.service';
@@ -17,5 +17,11 @@ export class TenderController {
   @Get('/recent')
   async getRecent() {
     return await this.tenderService.getRecent();
+  }
+
+  @UseGuards(JwtGuard)
+  @Get(':id')
+  async getUserProfile(@Param('id') id: number) {
+    return await this.tenderService.findById(id);
   }
 }
