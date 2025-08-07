@@ -23,7 +23,7 @@
 
 ## Description
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+backend project for tender app
 
 ## Project setup
 
