@@ -22,6 +22,7 @@ export class UserService {
       data: {
         ...dto,
         password: await hash(dto.password, 10),
+        approved: dto.role !== 'BUYER',
       },
     });
 
