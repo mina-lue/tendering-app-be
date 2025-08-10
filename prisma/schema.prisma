@@ -16,6 +16,7 @@ datasource db {
 enum Role {
   VENDOR
   BUYER
+  ADMIN
 }
 
 enum TenderStatus {
@@ -32,6 +33,7 @@ model User {
   sex      String?
   urlToDoc String?
   phone    String
+  approved Boolean @default(true)
   role     Role
   tenders  Tender[]
 }
