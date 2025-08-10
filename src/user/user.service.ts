@@ -52,7 +52,26 @@ export class UserService {
     return await this.prisma.user.findMany({
       where: {
         role: 'BUYER',
-        approved: false
+        approved: false,
+      },
+    });
+  }
+
+  async delete(email: string) {
+    return await this.prisma.user.delete({
+      where: {
+        email,
+      },
+    });
+  }
+
+  async approve(email: string) {
+    return await this.prisma.user.update({
+      where: {
+        email,
+      },
+      data: {
+        approved: true,
       },
     });
   }
