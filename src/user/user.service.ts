@@ -46,4 +46,12 @@ export class UserService {
       },
     });
   }
+
+  async getToBeApprovedBuyers() {
+    return await this.prisma.user.findMany({
+      where: {
+        role: 'BUYER',
+      },
+    });
+  }
 }
