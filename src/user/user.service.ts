@@ -52,6 +52,7 @@ export class UserService {
     return await this.prisma.user.findMany({
       where: {
         role: 'BUYER',
+        approved: false
       },
     });
   }

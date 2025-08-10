@@ -7,14 +7,14 @@ export class UserController {
   constructor(private userService: UserService) {}
 
   @UseGuards(JwtGuard)
-  @Get(':id')
-  async getUserProfile(@Param('id') id: number) {
-    return await this.userService.findById(id);
-  }
-
-  @UseGuards(JwtGuard)
   @Get('/to-be-approved')
   async getToBeApprovedBuyers() {
     return await this.userService.getToBeApprovedBuyers();
+  }
+
+  @UseGuards(JwtGuard)
+  @Get(':id')
+  async getUserProfile(@Param('id') id: number) {
+    return await this.userService.findById(id);
   }
 }
