@@ -21,5 +21,5 @@ export class CreateUserDto {
   phone: string;
 
   @IsString()
-  role: 'VENDOR' | 'BUYER';
+  role: 'VENDOR' | 'BUYER' | 'ADMIN';
 }
