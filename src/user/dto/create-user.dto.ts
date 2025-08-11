@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unsafe-call */
-import { IsEmail, IsString } from 'class-validator';
+import { IsBoolean, IsEmail, IsString } from 'class-validator';
 
 export class CreateUserDto {
   @IsString()
@@ -22,4 +22,7 @@ export class CreateUserDto {
 
   @IsString()
   role: 'VENDOR' | 'BUYER' | 'ADMIN';
+
+  @IsBoolean()
+  approved: boolean;
 }
