@@ -52,6 +52,9 @@ export class AuthService {
 
   async validateUser(dto: LoginDto) {
     const user = await this.userService.findByEmail(dto.email);
+    if(!user?.approved){
+      throw new UnauthorizedException('User not approved');
+    }
     if (
       user &&
       (await compare(dto.password, user.password))

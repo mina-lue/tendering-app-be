@@ -34,6 +34,11 @@ export class CreateTenderDto {
   @IsString()
   urlToDoc: string;
 
+  @IsOptional()
+  @ValidateIf((o) => o.document_buy_option === true)
+  @IsString()
+  documentPrice: string;
+
   @IsEnum(['CLOSED', 'OPEN', 'DRAFT'] as const)
   status: 'CLOSED' | 'OPEN' | 'DRAFT';
 }

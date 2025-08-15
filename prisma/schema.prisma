@@ -46,9 +46,10 @@ model Tender {
   closeAt             DateTime
   document_buy_option Boolean
   urlToDoc            String?
+  documentPrice       String?
   status              TenderStatus
   createdAt           DateTime     @default(now())
-  updatedAt           DateTime     @updatedAt
+  updatedAt           DateTime     @updatedAt     
 
   organization User @relation(fields: [organizationId], references: [id], onDelete: Cascade)
 

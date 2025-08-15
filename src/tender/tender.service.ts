@@ -16,12 +16,17 @@ export class TenderService {
         document_buy_option: tender.document_buy_option,
         status: tender.status,
         urlToDoc: tender.urlToDoc,
+        documentPrice: tender.documentPrice,
       },
     });
   }
 
   async getRecent() {
-    return await this.prisma.tender.findMany();
+    return await this.prisma.tender.findMany({
+      orderBy: {
+        createdAt: 'desc',
+      },
+    });
   }
 
   async findById(id: number) {
