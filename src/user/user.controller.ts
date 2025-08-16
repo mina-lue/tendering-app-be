@@ -49,4 +49,10 @@ export class UserController {
   async blockUser(@Param('id') id: number) {
     return await this.userService.blockUser(id);
   }
+
+  @UseGuards(JwtGuard)
+  @Delete(':id')
+  async deleteUser(@Param('id') id: number) {
+    return await this.userService.deleteById(id);
+  }
 }
