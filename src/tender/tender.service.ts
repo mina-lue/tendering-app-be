@@ -23,15 +23,44 @@ export class TenderService {
 
   async getRecent() {
     return await this.prisma.tender.findMany({
+      where: {
+        status: 'OPEN',
+        closeAt: {
+          gte: new Date(),
+        },
+      },
       orderBy: {
-        createdAt: 'desc',
+        updatedAt: 'desc',
       },
     });
   }
 
+  /*
   async findById(id: number) {
     return await this.prisma.tender.findUnique({
-      where: { id },
+      where: { id: id },
     });
+  }
+
+    */
+
+  async getAll() {
+    const tenders = await this.prisma.tender.findMany();
+
+    // Fetch all users (organizations)
+    const users = await this.prisma.user.findMany({
+      select: { id: true, name: true },
+    });
+
+    // Map user id to name for quick lookup
+    const userMap = new Map(users.map((org) => [org.id, org.name]));
+
+    return tenders.map((tender) => ({
+      ...tender,
+      organization: {
+        id: tender.organizationId,
+        name: userMap.get(tender.organizationId) || null,
+      },
+    }));
   }
 }
