@@ -2,6 +2,7 @@ import { ConflictException, Injectable } from '@nestjs/common';
 import { PrismaService } from 'src/prisma.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { hash } from 'bcrypt';
+import { notEqual } from 'assert';
 
 @Injectable()
 export class UserService {
@@ -72,6 +73,19 @@ export class UserService {
       },
       data: {
         approved: true,
+      },
+    });
+  }
+
+  async allUsers() {
+    return await this.prisma.user.findMany({
+      where: {
+        approved: true,
+        role: {
+          not: {
+            equals: 'ADMIN',
+          },
+        },
       },
     });
   }

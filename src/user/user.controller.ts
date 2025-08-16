@@ -36,4 +36,10 @@ export class UserController {
   async appprove(@Param('email') email: string) {
     return await this.userService.approve(email);
   }
+
+  @UseGuards(JwtGuard)
+  @Get()
+  async allUsers() {
+    return await this.userService.allUsers();
+  }
 }
