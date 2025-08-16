@@ -4,6 +4,7 @@ import {
   Get,
   Param,
   Patch,
+  Post,
   UseGuards,
 } from '@nestjs/common';
 import { UserService } from './user.service';
@@ -41,5 +42,11 @@ export class UserController {
   @Get()
   async allUsers() {
     return await this.userService.allUsers();
+  }
+
+  @UseGuards(JwtGuard)
+  @Post('/block/:id')
+  async blockUser(@Param('id') id: number) {
+    return await this.userService.blockUser(id);
   }
 }
