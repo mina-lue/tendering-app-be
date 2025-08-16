@@ -19,14 +19,14 @@ export class TenderController {
     return await this.tenderService.getRecent();
   }
 
-  /*
+  
   @UseGuards(JwtGuard)
   @Get(':id')
   async getUserProfile(@Param('id') id: number) {
     return await this.tenderService.findById(id);
   }
 
-  */
+  
 
   @UseGuards(JwtGuard)
   @Get('/all')

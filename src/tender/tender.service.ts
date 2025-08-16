@@ -35,14 +35,11 @@ export class TenderService {
     });
   }
 
-  /*
   async findById(id: number) {
     return await this.prisma.tender.findUnique({
       where: { id: id },
     });
   }
-
-    */
 
   async getAll() {
     const tenders = await this.prisma.tender.findMany();
