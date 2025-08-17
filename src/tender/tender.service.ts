@@ -37,7 +37,9 @@ export class TenderService {
 
   async findById(id: number) {
     return await this.prisma.tender.findUnique({
-      where: { id: id },
+      where: {
+        id,
+      },
     });
   }
 
@@ -59,5 +61,13 @@ export class TenderService {
         name: userMap.get(tender.organizationId) || null,
       },
     }));
+  }
+
+  async delete(id: number) {
+    return await this.prisma.tender.delete({
+      where: {
+        id,
+      },
+    });
   }
 }

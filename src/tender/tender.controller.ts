@@ -1,4 +1,12 @@
-import { Body, Controller, Get, Param, Post, UseGuards } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  Post,
+  UseGuards,
+} from '@nestjs/common';
 import { JwtGuard } from 'src/auth/gaurd/jwt.guard';
 import { CreateTenderDto } from './dto/CreateTender.dto';
 import { TenderService } from './tender.service';
@@ -19,18 +27,21 @@ export class TenderController {
     return await this.tenderService.getRecent();
   }
 
-  
-  @UseGuards(JwtGuard)
-  @Get(':id')
-  async getUserProfile(@Param('id') id: number) {
-    return await this.tenderService.findById(id);
-  }
-
-  
-
   @UseGuards(JwtGuard)
   @Get('/all')
   async getAll() {
     return await this.tenderService.getAll();
+  }
+
+  @UseGuards(JwtGuard)
+  @Get('/:id')
+  async getTenderDetails(@Param('id') id: number) {
+    return await this.tenderService.findById(id);
+  }
+
+  @UseGuards(JwtGuard)
+  @Delete('/:id')
+  async deleteTender(@Param('id') id: number) {
+    return await this.tenderService.delete(id);
   }
 }
