@@ -5,15 +5,21 @@ import {
   Get,
   Param,
   Post,
+  Req,
   UseGuards,
 } from '@nestjs/common';
 import { JwtGuard } from 'src/auth/gaurd/jwt.guard';
 import { CreateTenderDto } from './dto/CreateTender.dto';
 import { TenderService } from './tender.service';
+import { Request } from 'express';
+import { UserService } from 'src/user/user.service';
 
 @Controller('api/tenders')
 export class TenderController {
-  constructor(private tenderService: TenderService) {}
+  constructor(
+    private tenderService: TenderService,
+    private userService: UserService,
+  ) {}
 
   @UseGuards(JwtGuard)
   @Post('/new')
@@ -25,6 +31,35 @@ export class TenderController {
   @Get('/recent')
   async getRecent() {
     return await this.tenderService.getRecent();
+  }
+
+  @UseGuards(JwtGuard)
+  @Get('/my-tenders/recent')
+  async getMyRecentTenders(@Req() req: Request) {
+    if (!req.user?.username) {
+      throw new Error('User email not found in request');
+    }
+    const organization = await this.userService.findByEmail(req.user?.username);
+    if (!organization) {
+      throw new Error('Buyer not found');
+    }
+    return await this.tenderService.getMyRecent(organization.id);
+  }
+
+  @UseGuards(JwtGuard)
+  @Get('/my-tenders/:filter')
+  async getMyTenders(
+    @Req() req: Request,
+    @Param('filter') filter: 'OPEN' | 'DRAFT' | 'CLOSED',
+  ) {
+    if (!req.user?.username) {
+      throw new Error('User email not found in request');
+    }
+    const organization = await this.userService.findByEmail(req.user?.username);
+    if (!organization) {
+      throw new Error('Buyer not found');
+    }
+    return await this.tenderService.getMyTenders(filter, organization.id);
   }
 
   @UseGuards(JwtGuard)

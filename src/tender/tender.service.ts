@@ -35,6 +35,32 @@ export class TenderService {
     });
   }
 
+  async getMyRecent(buyerId: number) {
+    return await this.prisma.tender.findMany({
+      where: {
+        organizationId: buyerId,
+      },
+      orderBy: {
+        updatedAt: 'desc',
+      },
+    });
+  }
+
+  async getMyTenders(
+    filter: 'OPEN' | 'DRAFT' | 'CLOSED',
+    organizationId: number,
+  ) {
+    return await this.prisma.tender.findMany({
+      where: {
+        status: filter,
+        organizationId,
+      },
+      orderBy: {
+        updatedAt: 'desc',
+      },
+    });
+  }
+
   async findById(id: number) {
     return await this.prisma.tender.findUnique({
       where: {
