@@ -5,6 +5,7 @@ import {
   Get,
   Param,
   Post,
+  Put,
   Req,
   UseGuards,
 } from '@nestjs/common';
@@ -60,6 +61,19 @@ export class TenderController {
       throw new Error('Buyer not found');
     }
     return await this.tenderService.getMyTenders(filter, organization.id);
+  }
+
+  @UseGuards(JwtGuard)
+  @Put('/tenders/my-tenders/close/:id')
+  async closeMyTender(@Param('id') id: number, @Req() req: Request) {
+    if (!req.user?.username) {
+      throw new Error('User email not found in request');
+    }
+    const organization = await this.userService.findByEmail(req.user?.username);
+    if (!organization) {
+      throw new Error('Buyer not found');
+    }
+    return await this.tenderService.closeTender(id, organization.id);
   }
 
   @UseGuards(JwtGuard)

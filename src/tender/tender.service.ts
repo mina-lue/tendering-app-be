@@ -61,6 +61,18 @@ export class TenderService {
     });
   }
 
+  async closeTender(id: number, organizationId: number) {
+    return await this.prisma.tender.updateMany({
+      where: {
+        id,
+        organizationId,
+      },
+      data: {
+        status: 'CLOSED',
+      },
+    });
+  }
+
   async findById(id: number) {
     return await this.prisma.tender.findUnique({
       where: {
