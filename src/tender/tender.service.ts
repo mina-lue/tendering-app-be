@@ -21,6 +21,21 @@ export class TenderService {
     });
   }
 
+  async update(id: number, tender: CreateTenderDto) {
+    return await this.prisma.tender.update({
+      where: { id },
+      data: {
+        details: tender.details,
+        openAt: tender.open_at,
+        closeAt: tender.close_at,
+        document_buy_option: tender.document_buy_option,
+        status: tender.status,
+        urlToDoc: tender.urlToDoc,
+        documentPrice: tender.documentPrice,
+      },
+    });
+  }
+
   async getRecent() {
     return await this.prisma.tender.findMany({
       where: {

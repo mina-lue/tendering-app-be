@@ -76,6 +76,13 @@ export class TenderController {
     return await this.tenderService.closeTender(id, organization.id);
   }
 
+  // body: JSON.stringify(tenderData)
+  @UseGuards(JwtGuard)
+  @Put('/my-tenders/update/:id')
+  async update(@Param() id: number, @Body() tender: CreateTenderDto) {
+    return await this.tenderService.update(id, tender);
+  }
+
   @UseGuards(JwtGuard)
   @Get('/all')
   async getAll() {
