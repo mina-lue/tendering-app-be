@@ -24,7 +24,7 @@ export class TenderService {
 
   async update(id: number, tender: UpdateTenderDto) {
     return await this.prisma.tender.update({
-      where: { id: Number(id) },
+      where: { id },
       data: tender.document_buy_option
         ? {
             details: tender.details,
