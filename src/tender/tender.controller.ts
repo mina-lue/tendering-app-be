@@ -14,6 +14,7 @@ import { CreateTenderDto } from './dto/CreateTender.dto';
 import { TenderService } from './tender.service';
 import { Request } from 'express';
 import { UserService } from 'src/user/user.service';
+import { UpdateTenderDto } from './dto/UpdateTender.dto';
 
 @Controller('api/tenders')
 export class TenderController {
@@ -79,7 +80,7 @@ export class TenderController {
   // body: JSON.stringify(tenderData)
   @UseGuards(JwtGuard)
   @Put('/my-tenders/update/:id')
-  async update(@Param() id: number, @Body() tender: CreateTenderDto) {
+  async update(@Param() id: number, @Body() tender: UpdateTenderDto) {
     return await this.tenderService.update(id, tender);
   }
 

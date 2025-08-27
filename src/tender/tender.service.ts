@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { CreateTenderDto } from './dto/CreateTender.dto';
 import { PrismaService } from 'src/prisma.service';
+import { UpdateTenderDto } from './dto/UpdateTender.dto';
 
 @Injectable()
 export class TenderService {
@@ -21,18 +22,26 @@ export class TenderService {
     });
   }
 
-  async update(id: number, tender: CreateTenderDto) {
+  async update(id: number, tender: UpdateTenderDto) {
     return await this.prisma.tender.update({
       where: { id },
-      data: {
-        details: tender.details,
-        openAt: tender.open_at,
-        closeAt: tender.close_at,
-        document_buy_option: tender.document_buy_option,
-        status: tender.status,
-        urlToDoc: tender.urlToDoc,
-        documentPrice: tender.documentPrice,
-      },
+      data: tender.document_buy_option
+        ? {
+            details: tender.details,
+            openAt: tender.open_at,
+            closeAt: tender.close_at,
+            document_buy_option: tender.document_buy_option,
+            status: tender.status,
+            urlToDoc: tender.urlToDoc,
+            documentPrice: tender.documentPrice,
+          }
+        : {
+            details: tender.details,
+            openAt: tender.open_at,
+            closeAt: tender.close_at,
+            document_buy_option: tender.document_buy_option,
+            status: tender.status,
+          },
     });
   }
 
