@@ -80,7 +80,7 @@ export class TenderController {
   // body: JSON.stringify(tenderData)
   @UseGuards(JwtGuard)
   @Put('/my-tenders/update/:id')
-  async update(@Param() id: number, @Body() tender: UpdateTenderDto) {
+  async update(@Param('id') id: number, @Body() tender: UpdateTenderDto) {
     return await this.tenderService.update(id, tender);
   }
 
