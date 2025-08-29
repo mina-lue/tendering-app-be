@@ -132,4 +132,27 @@ export class TenderService {
       },
     });
   }
+
+  async totalActiveTenders() {
+    return await this.prisma.tender.count({
+      where: {
+        status: 'OPEN',
+        closeAt: {
+          gte: new Date(),
+        },
+      },
+    });
+  }
+
+  async totalClosedTenders() {
+    return await this.prisma.tender.count({
+      where: {
+        status: 'CLOSED',
+      },
+    });
+  }
+
+  async totalTenders() {
+    return await this.prisma.tender.count();
+  }
 }

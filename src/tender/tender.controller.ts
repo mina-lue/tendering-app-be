@@ -36,6 +36,24 @@ export class TenderController {
   }
 
   @UseGuards(JwtGuard)
+  @Get('/total-active-tenders')
+  async totalActiveTenders() {
+    return await this.tenderService.totalActiveTenders();
+  }
+
+  @UseGuards(JwtGuard)
+  @Get('/total-closed-tenders')
+  async totalClosedTenders() {
+    return await this.tenderService.totalClosedTenders();
+  }
+
+  @UseGuards(JwtGuard)
+  @Get('/total-tenders')
+  async totalTenders() {
+    return await this.tenderService.totalTenders();
+  }
+
+  @UseGuards(JwtGuard)
   @Get('/my-tenders/recent')
   async getMyRecentTenders(@Req() req: Request) {
     if (!req.user?.username) {
@@ -77,7 +95,6 @@ export class TenderController {
     return await this.tenderService.closeTender(id, organization.id);
   }
 
-  // body: JSON.stringify(tenderData)
   @UseGuards(JwtGuard)
   @Put('/my-tenders/update/:id')
   async update(@Param('id') id: number, @Body() tender: UpdateTenderDto) {

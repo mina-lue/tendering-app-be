@@ -119,4 +119,38 @@ export class UserService {
       },
     });
   }
+
+  async totalVendors() {
+    return await this.prisma.user.count({
+      where: {
+        role: 'VENDOR',
+      },
+    });
+  }
+
+  async totalBuyers() {
+    return await this.prisma.user.count({
+      where: {
+        role: 'BUYER',
+      },
+    });
+  }
+
+  async totalUnApprovedBuyers() {
+    return await this.prisma.user.count({
+      where: {
+        role: 'BUYER',
+        approved: false,
+      },
+    });
+  }
+
+  async totalBlockedVendors() {
+    return await this.prisma.user.count({
+      where: {
+        role: 'VENDOR',
+        approved: false,
+      },
+    });
+  }
 }

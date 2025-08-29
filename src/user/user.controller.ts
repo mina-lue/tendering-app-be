@@ -45,6 +45,30 @@ export class UserController {
   }
 
   @UseGuards(JwtGuard)
+  @Get('/total-vendors')
+  async totalVendors() {
+    return await this.userService.totalVendors();
+  }
+
+  @UseGuards(JwtGuard)
+  @Get('/total-buyers')
+  async totalBuyers() {
+    return await this.userService.totalBuyers();
+  }
+
+  @UseGuards(JwtGuard)
+  @Get('/total-unapproved-buyers')
+  async totalUnApprovedBuyers() {
+    return await this.userService.totalUnApprovedBuyers();
+  }
+
+  @UseGuards(JwtGuard)
+  @Get('/total-blocked-vendors')
+  async totalBlockedVendors() {
+    return await this.userService.totalBlockedVendors();
+  }
+
+  @UseGuards(JwtGuard)
   @Get(':id')
   async getUserProfile(@Param('id') id: number) {
     return await this.userService.findById(id);
