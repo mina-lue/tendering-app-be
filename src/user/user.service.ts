@@ -84,7 +84,7 @@ export class UserService {
     });
   }
 
-  async allUsers() {
+  async getUsers() {
     return await this.prisma.user.findMany({
       where: {
         approved: true,
@@ -97,13 +97,25 @@ export class UserService {
     });
   }
 
-  async blockUser(id: number) {
+  async allUsers() {
+    return await this.prisma.user.findMany({
+      where: {
+        role: {
+          not: {
+            equals: 'ADMIN',
+          },
+        },
+      },
+    });
+  }
+
+  async blockUser(id: number, status: boolean) {
     return await this.prisma.user.update({
       where: {
         id,
       },
       data: {
-        approved: false,
+        approved: status,
       },
     });
   }

@@ -21,12 +21,6 @@ export class UserController {
   }
 
   @UseGuards(JwtGuard)
-  @Get(':id')
-  async getUserProfile(@Param('id') id: number) {
-    return await this.userService.findById(id);
-  }
-
-  @UseGuards(JwtGuard)
   @Delete('/approve/:email')
   async delete(@Param('email') email: string) {
     return await this.userService.delete(email);
@@ -40,14 +34,32 @@ export class UserController {
 
   @UseGuards(JwtGuard)
   @Get()
+  async getUsers() {
+    return await this.userService.getUsers();
+  }
+
+  @UseGuards(JwtGuard)
+  @Get('/all')
   async allUsers() {
     return await this.userService.allUsers();
   }
 
   @UseGuards(JwtGuard)
+  @Get(':id')
+  async getUserProfile(@Param('id') id: number) {
+    return await this.userService.findById(id);
+  }
+
+  @UseGuards(JwtGuard)
   @Post('/block/:id')
   async blockUser(@Param('id') id: number) {
-    return await this.userService.blockUser(id);
+    return await this.userService.blockUser(id, true);
+  }
+
+  @UseGuards(JwtGuard)
+  @Post('/unblock/:id')
+  async unblockUser(@Param('id') id: number) {
+    return await this.userService.blockUser(id, false);
   }
 
   @UseGuards(JwtGuard)
