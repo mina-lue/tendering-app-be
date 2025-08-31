@@ -83,7 +83,7 @@ export class TenderController {
   }
 
   @UseGuards(JwtGuard)
-  @Put('/tenders/my-tenders/close/:id')
+  @Put('/my-tenders/close/:id')
   async closeMyTender(@Param('id') id: number, @Req() req: Request) {
     if (!req.user?.username) {
       throw new Error('User email not found in request');

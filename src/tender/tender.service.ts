@@ -86,7 +86,7 @@ export class TenderService {
   }
 
   async closeTender(id: number, organizationId: number) {
-    return await this.prisma.tender.updateMany({
+    return await this.prisma.tender.update({
       where: {
         id,
         organizationId,
